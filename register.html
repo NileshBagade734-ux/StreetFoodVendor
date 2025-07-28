@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - StreetVendor Connect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body.dark { background-color: #1a202c; color: white; } 
+    .dark input, .dark select { background-color: #2d3748; color: white; border-color: #4a5568; }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Dark Mode Toggle -->
+  <div class="flex justify-end p-4">
+    <button id="darkToggle" class="bg-gray-800 text-white px-4 py-1 rounded">Toggle Dark Mode</button>
+  </div>
+
+  <!-- Register Form -->
+  <section class="max-w-3xl mx-auto p-8 bg-white rounded shadow">
+    <h2 class="text-2xl font-bold text-purple-800 mb-6 text-center">Register Account</h2>
+    <form id="registerForm" class="grid grid-cols-1 gap-4">
+      <input type="text" name="fullName" placeholder="Full Name" required class="border p-2 rounded" />
+      <input type="email" name="email" placeholder="Email" required class="border p-2 rounded" />
+      <input type="password" name="password" placeholder="Password" required class="border p-2 rounded" />
+      <input type="password" name="confirmPassword" placeholder="Confirm Password" required class="border p-2 rounded" />
+      <input type="tel" name="phone" placeholder="Mobile Number" required class="border p-2 rounded" />
+
+      <select name="role" id="role" required class="border p-2 rounded">
+        <option value="">Select Role</option>
+        <option value="vendor">Vendor</option>
+        <option value="supplier">Supplier</option>
+      </select>
+
+      <!-- Common Fields -->
+      <input type="text" name="address" placeholder="Address" required class="border p-2 rounded" />
+      <input type="text" name="city" placeholder="City" required class="border p-2 rounded" />
+      <input type="text" name="state" placeholder="State" required class="border p-2 rounded" />
+      <input type="text" name="pincode" placeholder="Pincode" required class="border p-2 rounded" />
+
+      <!-- Vendor Fields -->
+      <div id="vendorFields" class="hidden">
+        <input type="text" name="shopName" placeholder="Shop/Cart Name" class="border p-2 rounded mt-2" />
+        <input type="text" name="foodType" placeholder="Type of Food Served" class="border p-2 rounded mt-2" />
+        <input type="text" name="purchaseCapacity" placeholder="Daily Purchase Capacity" class="border p-2 rounded mt-2" />
+        <input type="text" name="operatingHours" placeholder="Operating Hours" class="border p-2 rounded mt-2" />
+        <select name="paymentMode" class="border p-2 rounded mt-2">
+          <option value="">Preferred Payment Mode</option>
+          <option value="upi">UPI</option>
+          <option value="cash">Cash</option>
+          <option value="wallet">Wallet</option>
+        </select>
+      </div>
+
+      <!-- Supplier Fields -->
+      <div id="supplierFields" class="hidden">
+        <input type="text" name="businessName" placeholder="Business Name" class="border p-2 rounded mt-2" />
+        <input type="text" name="gstin" placeholder="GSTIN (optional)" class="border p-2 rounded mt-2" />
+        <input type="text" name="categories" placeholder="Product Categories (comma-separated)" class="border p-2 rounded mt-2" />
+        <input type="text" name="minOrderQty" placeholder="Minimum Order Quantity" class="border p-2 rounded mt-2" />
+        <input type="text" name="deliveryZones" placeholder="Delivery Capabilities (city names)" class="border p-2 rounded mt-2" />
+        <input type="text" name="warehouseAddress" placeholder="Warehousing Address" class="border p-2 rounded mt-2" />
+      </div>
+
+      <input type="text" name="referral" placeholder="Referral Code (optional)" class="border p-2 rounded" />
+
+      <label class="text-sm">
+        <input type="checkbox" required class="mr-2" /> I agree to the Terms & Conditions
+      </label>
+
+      <button type="submit" class="bg-purple-700 text-white py-2 rounded hover:bg-purple-800">Register</button>
+
+      <p class="text-center text-sm mt-4">Already have an account? <a href="login.html" class="text-purple-700 underline">Login</a></p>
+    </form>
+  </section>
+
+  <!-- SCRIPT SECTION -->
+<script>
+  const roleSelect = document.getElementById('role');
+  const vendorFields = document.getElementById('vendorFields');
+  const supplierFields = document.getElementById('supplierFields');
+  const darkToggle = document.getElementById('darkToggle');
+
+  roleSelect.addEventListener('change', () => {
+    const role = roleSelect.value;
+    vendorFields.classList.toggle('hidden', role !== 'vendor');
+    supplierFields.classList.toggle('hidden', role !== 'supplier');
+  });
+
+  darkToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+  });
+
+  document.getElementById('registerForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    const name = data.fullName;
+    const role = data.role;
+
+    alert(`Welcome, ${name}! You’ve successfully registered as a ${role}.`);
+
+    // Store supplier info in localStorage
+    if (role === "supplier") {
+      const supplierData = {
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        businessName: data.businessName,
+        gstin: data.gstin,
+        categories: data.categories,
+        minOrderQty: data.minOrderQty,
+        deliveryZones: data.deliveryZones,
+        warehouseAddress: data.warehouseAddress,
+        city: data.city,
+        state: data.state,
+        address: data.address,
+        pincode: data.pincode
+      };
+      localStorage.setItem("supplier", JSON.stringify(supplierData));
+      window.location.href = "supplier-dashboard.html";
+    } 
+    else if (role === "vendor") {
+      // You can store vendor info here similarly if needed
+      window.location.href = "dashboard.html";
+    } 
+    else {
+      alert("Please select a valid role.");
+    }
+  });
+</script>
+
+
+</body>
+</html>
