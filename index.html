@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StreetVendor Connect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .active-link { border-bottom: 2px solid white; }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+
+<!-- Navbar -->
+<nav class="bg-purple-800 text-white p-4 sticky top-0 z-50">
+  <div class="container mx-auto flex justify-between items-center">
+    <h1 class="text-xl font-bold">StreetVendor Connect</h1>
+    <div id="navbar-links">
+      <a href="#home" class="px-4 hover:underline">Home</a>
+      <a href="login.html" class="px-4 hover:underline">Login</a>
+      <a href="register.html" class="px-4 hover:underline">Register</a>
+      <a href="about.html" class="px-4 hover:underline">About</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<header id="home" class="relative text-center py-16 bg-white shadow-md"
+  style="background-image: url('assets/hero.jpeg'); background-size: cover; background-position: center;">
+  <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+  <div class="relative z-10">
+    <h2 class="text-3xl font-bold text-white">Buy Raw Materials at Wholesale Prices</h2>
+    <p class="text-gray-100 mt-2">Connecting Street Vendors directly with Suppliers</p>
+    <a href="product.html"
+      class="mt-6 inline-block bg-purple-700 text-white px-6 py-3 rounded hover:bg-purple-800">Browse Products</a>
+  </div>
+</header>
+
+
+<!-- Why Choose Us -->
+<section class="bg-white py-12">
+  <div class="container mx-auto text-center">
+    <h3 class="text-2xl font-bold text-purple-800 mb-6">Why Choose Us?</h3>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 px-6">
+      <div>
+        <div class="text-4xl mb-2">🚚</div>
+        <h4 class="font-bold">Fast Delivery</h4>
+        <p class="text-sm text-gray-600">Same-day delivery options in select cities</p>
+      </div>
+      <div>
+        <div class="text-4xl mb-2">🤝</div>
+        <h4 class="font-bold">Trusted Suppliers</h4>
+        <p class="text-sm text-gray-600">All our suppliers are verified & rated</p>
+      </div>
+      <div>
+        <div class="text-4xl mb-2">📦</div>
+        <h4 class="font-bold">Bulk Discounts</h4>
+        <p class="text-sm text-gray-600">Great deals for vendors buying in volume</p>
+      </div>
+      <div>
+        <div class="text-4xl mb-2">📞</div>
+        <h4 class="font-bold">24x7 Support</h4>
+        <p class="text-sm text-gray-600">Chat, Call or Email – we're always here</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Product Section -->
+<section id="products" class="relative bg-cover bg-center bg-no-repeat py-16" style="background-image: url('assets/hero1.jpeg');">
+  <div class="absolute inset-0 bg-white bg-opacity-80 backdrop-blur-sm"></div>
+  <div class="relative container mx-auto px-4">
+    <h3 class="text-2xl font-semibold mb-6 text-center text-purple-800">Featured Categories</h3>
+    <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
+      <input type="text" id="searchInput" placeholder="Search products..."
+        class="w-full sm:w-1/2 px-4 py-2 border rounded shadow focus:outline-none focus:ring-2 focus:ring-purple-600">
+      <select id="categoryFilter" class="w-full sm:w-1/4 px-4 py-2 border rounded shadow">
+        <option value="all">All Categories</option>
+        <option value="vegetables">Vegetables</option>
+        <option value="spices">Spices</option>
+        <option value="grains">Grains</option>
+        <option value="supplies">Other Supplies</option>
+      </select>
+    </div>
+    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"></div>
+  </div>
+</section>
+
+<!-- 🔥 Trending Products Section -->
+<section class="py-12 bg-white">
+  <div class="container mx-auto">
+    <h2 class="text-2xl font-bold text-purple-800 mb-4 text-center">🔥 Trending Products</h2>
+    <div class="overflow-x-auto flex gap-6 px-4 pb-4">
+      <div class="min-w-[200px] bg-white shadow p-4 rounded text-center">
+        <img src="assets/tomato.jpeg" class="h-32 w-full object-cover rounded mb-2" />
+        <h4 class="font-semibold">Tomatoes</h4>
+        <p class="text-sm text-gray-600">₹20/kg</p>
+      </div>
+      <div class="min-w-[200px] bg-white shadow p-4 rounded text-center">
+        <img src="assets/spice.jpeg" class="h-32 w-full object-cover rounded mb-2" />
+        <h4 class="font-semibold">Indian Spices</h4>
+        <p class="text-sm text-gray-600">₹100/kg</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 🙋 Vendor Registration CTA -->
+<section class="py-12 bg-purple-100 text-center">
+  <h3 class="text-2xl font-bold mb-4 text-purple-800">Are You a Street Vendor Or Supplier?</h3>
+  <p class="text-gray-700 mb-4">Join our platform and grow your business with direct supplier access.</p>
+  <a href="register.html" class="bg-purple-700 text-white px-6 py-2 rounded hover:bg-purple-800">Register Now</a>
+</section>
+
+<!-- Testimonials -->
+<section class="bg-gray-200 py-12">
+  <div class="container mx-auto text-center">
+    <h3 class="text-2xl font-bold text-purple-800 mb-8">What Vendors Say</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-6">
+      <div class="bg-white p-6 rounded shadow">
+        <img src="assets/raju.jpeg" alt="Raju Bhai" class="w-20 h-20 rounded-full mx-auto mb-4 object-cover border-4 border-purple-200" />
+        <p class="italic">"The best prices and very fast delivery! Saved my business. Highly recommend."</p>
+        <h4 class="mt-4 font-bold">— Raju Bhai, Mumbai</h4>
+      </div>
+      <div class="bg-white p-6 rounded shadow">
+        <img src="assets/meenu.jpeg" alt="Meena Tai" class="w-20 h-20 rounded-full mx-auto mb-4 object-cover border-4 border-purple-200" />
+        <p class="italic">"I order everything from StreetVendor now. The quality is top-notch!"</p>
+        <h4 class="mt-4 font-bold">— Meena Tai, Pune</h4>
+      </div>
+      <div class="bg-white p-6 rounded shadow">
+        <img src="assets/suresh.jpeg" alt="Suresh Anna" class="w-20 h-20 rounded-full mx-auto mb-4 object-cover border-4 border-purple-200" />
+        <p class="italic">"Support team helped me even at midnight. Truly a vendor's friend."</p>
+        <h4 class="mt-4 font-bold">— Suresh Anna, Nagpur</h4>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 📰 Vendor Tips & Blog -->
+<section class="py-12 bg-white">
+  <div class="container mx-auto">
+    <h2 class="text-2xl font-bold text-purple-800 text-center mb-8">📰 Vendor Tips & News</h2>
+    <div class="grid md:grid-cols-3 gap-6 px-4">
+      <div class="bg-gray-100 p-4 rounded shadow">
+        <h4 class="font-semibold mb-2">How to Store Veggies in Summer</h4>
+        <p class="text-sm text-gray-600">Keep your products fresh & lasting longer...</p>
+      </div>
+      <div class="bg-gray-100 p-4 rounded shadow">
+        <h4 class="font-semibold mb-2">Top 5 Profitable Items in 2025</h4>
+        <p class="text-sm text-gray-600">Boost your earnings by focusing on these...</p>
+      </div>
+      <div class="bg-gray-100 p-4 rounded shadow">
+        <h4 class="font-semibold mb-2">How to Negotiate with Suppliers</h4>
+        <p class="text-sm text-gray-600">Maximize your margins smartly and politely.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer (Amazon-style) -->
+<footer class="bg-gray-900 text-gray-300 pt-10 pb-6">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 mb-10">
+      <div>
+        <h4 class="text-white font-semibold mb-3">Get to Know Us</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:underline">About StreetVendor</a></li>
+          <li><a href="#" class="hover:underline">Careers</a></li>
+          <li><a href="#" class="hover:underline">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold mb-3">Connect with Us</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:underline">Facebook</a></li>
+          <li><a href="#" class="hover:underline">Instagram</a></li>
+          <li><a href="#" class="hover:underline">Twitter</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold mb-3">Make Money with Us</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:underline">Sell on StreetVendor</a></li>
+          <li><a href="#" class="hover:underline">Become a Supplier</a></li>
+          <li><a href="#" class="hover:underline">Advertise Products</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold mb-3">Help</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:underline">Your Account</a></li>
+          <li><a href="#" class="hover:underline">Returns Centre</a></li>
+          <li><a href="#" class="hover:underline">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold mb-3">Subscribe</h4>
+        <p class="text-sm mb-2">Get updates & special offers</p>
+        <form class="flex flex-col space-y-2">
+          <input type="email" placeholder="Enter your email" class="px-3 py-2 rounded text-black text-sm">
+          <button class="bg-purple-700 hover:bg-purple-800 text-white text-sm px-3 py-2 rounded">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <hr class="border-gray-700 my-6" />
+    <div class="flex flex-col md:flex-row justify-between items-center text-sm space-y-4 md:space-y-0">
+      <div class="flex items-center space-x-3">
+        <select class="bg-gray-800 text-gray-300 px-3 py-2 rounded">
+          <option>🌐 English - India</option>
+          <option>हिन्दी</option>
+          <option>मराठी</option>
+        </select>
+        <select class="bg-gray-800 text-gray-300 px-3 py-2 rounded">
+          <option>🇮🇳 India</option>
+          <option>🇺🇸 USA</option>
+        </select>
+      </div>
+      <div class="flex space-x-4">
+        <a href="#"><img src="assets/playstore.png" class="h-8" /></a>
+        <a href="#"><img src="assets/appstore.png" class="h-8" /></a>
+      </div>
+    </div>
+    <div class="mt-6 text-center text-xs">
+      <p>&copy; 2025 <strong>StreetVendor Connect</strong>. All rights reserved.</p>
+      <p>Owned and operated by <span class="text-white font-semibold">Nilesh Bagade</span>.</p>
+    </div>
+  </div>
+</footer>
+<!-- ✅ Modal for Product Details -->
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center hidden z-50">
+  <div class="bg-white rounded-lg p-6 max-w-sm w-full text-center relative">
+    <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-red-600 text-xl">&times;</button>
+    <img id="modalImg" src="" alt="Product" class="w-32 h-32 object-cover mx-auto rounded mb-4">
+    <h3 id="modalTitle" class="text-xl font-bold mb-2"></h3>
+    <p id="modalPrice" class="text-sm text-gray-700 mb-1"></p>
+    <p id="modalDesc" class="text-sm text-gray-500"></p>
+  </div>
+</div>
+
+<!-- 🟩 WhatsApp Button -->
+<a href="https://wa.me/919999999999" target="_blank" class="fixed bottom-20 right-6 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-full shadow-lg flex items-center space-x-2 z-50">
+  <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" class="h-5 w-5" />
+  <span class="text-sm">Chat</span>
+</a>
+
+<!-- 🔝 Scroll-to-Top Button -->
+<button id="scrollTopBtn" class="fixed bottom-6 right-6 bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded-full shadow-lg hidden">↑</button>
+
+<!-- ✅ Script -->
+<script>
+  const productGrid = document.getElementById('product-grid');
+  const searchInput = document.getElementById('searchInput');
+  const categoryFilter = document.getElementById('categoryFilter');
+
+  const modal = document.getElementById('modal');
+  const closeModal = document.getElementById('closeModal');
+  const modalImg = document.getElementById('modalImg');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalPrice = document.getElementById('modalPrice');
+  const modalDesc = document.getElementById('modalDesc');
+
+  const products = [
+    { name: 'Fresh Vegetables', category: 'vegetables', price: '₹20/kg', image: "assets/tomato.jpeg", stock: 'Only 10kg Left' },
+    { name: 'Indian Spices', category: 'spices', price: '₹100/kg', image: "assets/spice.jpeg", stock: '25% Off Today' },
+    { name: 'Grains & Pulses', category: 'grains', price: '₹60/kg', image: "assets/grain.jpeg", stock: 'Hot Deal!' },
+    { name: 'Street Food Supplies', category: 'supplies', price: '₹Varies', image: "assets/supplies.jpeg", stock: 'Limited Stock' },
+    { name: 'Onions', category: 'vegetables', price: '₹18/kg', image: "assets/onion.jpeg", stock: 'Low Stock!' },
+    { name: 'Chickpeas', category: 'grains', price: '₹55/kg', image: "assets/chickpea.jpeg", stock: 'Fresh Arrival' },
+    { name: 'Oil', category: 'supplies', price: '₹300/litre', image: "assets/oil.jpeg", stock: 'Best Quality' },
+    { name: 'Sauces', category: 'supplies', price: '₹50/200ml', image: "assets/sauce.jpeg", stock: 'Fresh Arrival' },
+  ];
+
+  function openModal(product) {
+    modalImg.src = product.image;
+    modalTitle.textContent = product.name;
+    modalPrice.textContent = `Price: ${product.price}`;
+    modalDesc.textContent = `Special Offer: ${product.stock}`;
+    modal.classList.remove('hidden');
+  }
+
+  closeModal.addEventListener('click', () => {
+    modal.classList.add('hidden');
+  });
+
+  function displayProducts(list = products) {
+    productGrid.innerHTML = '';
+    list.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'bg-white p-4 rounded shadow text-center cursor-pointer';
+      div.innerHTML = `
+        <div class="relative">
+          <img src="${p.image}" alt="${p.name}" class="w-full h-40 object-cover rounded mb-2">
+          <span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">${p.stock}</span>
+        </div>
+        <h4 class="text-lg font-bold">${p.name}</h4>
+        <p class="text-sm text-gray-600">${p.price}</p>
+        <button class="mt-2 bg-purple-700 text-white px-4 py-1 rounded hover:bg-purple-800">View Details</button>
+      `;
+      div.querySelector('button').addEventListener('click', () => openModal(p));
+      productGrid.appendChild(div);
+    });
+  }
+
+  function filterProducts() {
+    const term = searchInput.value.toLowerCase();
+    const category = categoryFilter.value;
+    const filtered = products.filter(p =>
+      (category === 'all' || p.category === category) &&
+      p.name.toLowerCase().includes(term)
+    );
+    displayProducts(filtered);
+  }
+
+  searchInput.addEventListener('input', filterProducts);
+  categoryFilter.addEventListener('change', filterProducts);
+  displayProducts();
+
+  // Scroll to top button
+  const scrollTopBtn = document.getElementById("scrollTopBtn");
+  window.onscroll = () => {
+    scrollTopBtn.classList.toggle("hidden", window.scrollY < 400);
+  };
+  scrollTopBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>
+
+</body>
+</html>
