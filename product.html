@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Listing - StreetVendor Connect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+  html {
+    scroll-behavior: smooth;
+  }
+.supplier-btn:hover {
+  background-color: #6b46c1;  /* A deeper purple on hover */
+  color: white;
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+}
+
+  .active {
+    font-weight: bold;
+    color: #6b46c1;
+  }
+
+  .dark-mode {
+    background-color: #1a202c;
+    color: white;
+  }
+
+  body {
+    background-image: url('assets/register.jpeg'); /* 📷 Your image path */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+  }
+</style>
+</head>
+<body class="bg-gray-100 font-sans" id="body">
+  <nav class="bg-purple-800 text-white p-4 sticky top-0 z-50 flex justify-between">
+    <h1 class="text-xl font-bold">StreetVendor Connect</h1>
+    <div class="space-x-4">
+      <select id="languageSelect" class="text-black rounded px-2 py-1">
+        <option value="en">English</option>
+        <option value="hi">हिंदी</option>
+      </select>
+      <button id="toggleDarkMode" class="bg-white text-purple-800 px-2 py-1 rounded">Toggle Dark Mode</button>
+    </div>
+  </nav>
+
+  <header class="p-6">
+    <h2 class="text-2xl font-bold mb-2">Browse Wholesale Products</h2>
+    <div class="flex flex-wrap gap-4 mb-4">
+      <input id="searchInput" type="text" placeholder="Search products..." class="border rounded p-2 w-64">
+      <select id="categoryFilter" class="border rounded p-2">
+        <option value="all">All</option>
+        <option value="vegetables">Vegetables</option>
+        <option value="spices">Spices</option>
+        <option value="grains">Grains</option>
+        <option value="fruits">Fruits</option>
+        <option value="dairy">Dairy</option>
+        <option value="oils">Oils</option>
+        <option value="others">Others</option>
+      </select>
+    </div>
+
+    <div class="flex gap-3 overflow-x-auto pb-3" id="supplierButtons"></div>
+  </header>
+
+  <main class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-6" id="productGrid"></main>
+
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center">
+    <div class="bg-white p-6 rounded w-96 relative">
+      <button onclick="closeModal()" class="absolute top-2 right-2 text-lg">✖</button>
+      <h3 id="modalTitle" class="text-xl font-bold mb-2"></h3>
+      <p id="modalDesc" class="text-gray-600 mb-2"></p>
+      <p id="modalPrice" class="font-semibold mb-2"></p>
+      <label for="quantity">Quantity (kg):</label>
+      <input id="modalQty" type="number" min="1" value="1" class="border rounded px-2 py-1 w-20 mb-2">
+      <p id="modalStock" class="text-sm text-red-600 mb-2"></p>
+      <button onclick="addToCart()" class="bg-purple-800 text-white px-4 py-2 rounded">Add to Cart</button>
+    </div>
+  </div>
+
+  
+<!-- Footer (Amazon-style) -->
+<footer class="bg-gray-900 text-gray-300 pt-10 pb-6">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 mb-10">
+      <div>
+        <h4 class="text-white font-semibold mb-3">Get to Know Us</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:underline">About StreetVendor</a></li>
+          <li><a href="#" class="hover:underline">Careers</a></li>
+          <li><a href="#" class="hover:underline">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold mb-3">Connect with Us</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:underline">Facebook</a></li>
+          <li><a href="#" class="hover:underline">Instagram</a></li>
+          <li><a href="#" class="hover:underline">Twitter</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold mb-3">Make Money with Us</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:underline">Sell on StreetVendor</a></li>
+          <li><a href="#" class="hover:underline">Become a Supplier</a></li>
+          <li><a href="#" class="hover:underline">Advertise Products</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold mb-3">Help</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:underline">Your Account</a></li>
+          <li><a href="#" class="hover:underline">Returns Centre</a></li>
+          <li><a href="#" class="hover:underline">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold mb-3">Subscribe</h4>
+        <p class="text-sm mb-2">Get updates & special offers</p>
+        <form class="flex flex-col space-y-2">
+          <input type="email" placeholder="Enter your email" class="px-3 py-2 rounded text-black text-sm">
+          <button class="bg-purple-700 hover:bg-purple-800 text-white text-sm px-3 py-2 rounded">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <hr class="border-gray-700 my-6" />
+    <div class="flex flex-col md:flex-row justify-between items-center text-sm space-y-4 md:space-y-0">
+      <div class="flex items-center space-x-3">
+        <select class="bg-gray-800 text-gray-300 px-3 py-2 rounded">
+          <option>🌐 English - India</option>
+          <option>हिन्दी</option>
+          <option>मराठी</option>
+        </select>
+        <select class="bg-gray-800 text-gray-300 px-3 py-2 rounded">
+          <option>🇮🇳 India</option>
+          <option>🇺🇸 USA</option>
+        </select>
+      </div>
+      <div class="flex space-x-4">
+        <a href="#"><img src="assets/playstore.png" class="h-8" /></a>
+        <a href="#"><img src="assets/appstore.png" class="h-8" /></a>
+      </div>
+    </div>
+    <div class="mt-6 text-center text-xs">
+      <p>&copy; 2025 <strong>StreetVendor Connect</strong>. All rights reserved.</p>
+      <p>Owned and operated by <span class="text-white font-semibold">Nilesh Bagade</span>.</p>
+    </div>
+  </div>
+</footer>
+
+  <script>
+    const products = [
+      { name: "Tomatoes", category: "vegetables", supplier: "FreshFarm", price: 20, stock: 100, desc: "Fresh red tomatoes", badges: ["Fresh"], image: "assets/tomato.jpeg" },
+      { name: "Onions", category: "vegetables", supplier: "AgroBazaar", price: 18, stock: 200, desc: "Farm onions", badges: ["Hot"], image: "assets/onion.jpeg" },
+      { name: "Potatoes", category: "vegetables", supplier: "FreshFarm", price: 22, stock: 150, desc: "Good quality potatoes", image: "assets/potato.jpeg"},
+      { name: "Green Chillies", category: "vegetables", supplier: "FreshFarm", price: 40, stock: 80, desc: "Spicy and fresh", image: "assets/chilli.jpeg" },
+      { name: "Turmeric Powder", category: "spices", supplier: "SpiceKing", price: 120, stock: 60, desc: "Premium quality turmeric", image: "assets/haldi.jpeg" },
+      { name: "Red Chilli Powder", category: "spices", supplier: "SpiceKing", price: 150, stock: 75, desc: "Fiery spice powder", badges: ["🔥"], image: "assets/red chilli.jpeg"},
+      { name: "Coriander Powder", category: "spices", supplier: "SpiceKing", price: 110, stock: 90, desc: "Fine coriander", image: "assets/dhaniya.jpeg"},
+      { name: "Wheat Flour", category: "grains", supplier: "GrainPro", price: 35, stock: 300, desc: "Stone ground wheat flour", image: "assets/wheat.jpeg"},
+      { name: "Rice", category: "grains", supplier: "GrainPro", price: 45, stock: 400, desc: "Premium basmati", image: "assets/rice.jpeg"},
+      { name: "Bajra", category: "grains", supplier: "GrainPro", price: 30, stock: 250, desc: "Millet for nutritious food", image: "assets/bajra.jpeg"},
+      { name: "Chana Dal", category: "grains", supplier: "GrainPro", price: 60, stock: 200, desc: "Split chickpeas", image: "assets/besan.jpeg"},
+      { name: "Milk", category: "dairy", supplier: "DairyPure", price: 48, stock: 100, desc: "Pure cow milk", image: "assets/milk.jpeg" },
+      { name: "Paneer", category: "dairy", supplier: "DairyPure", price: 240, stock: 60, desc: "Fresh cottage cheese", image: "assets/paneer.jpeg" },
+      { name: "Butter", category: "dairy", supplier: "DairyPure", price: 380, stock: 80, desc: "Creamy butter", badges: ["New"], image: "assets/butter.jpeg" },
+      { name: "Curd", category: "dairy", supplier: "DairyPure", price: 60, stock: 100, desc: "Homemade curd", image: "assets/curd.jpeg"},
+      { name: "Sunflower Oil", category: "oils", supplier: "OilMill", price: 130, stock: 120, desc: "Refined sunflower oil", image: "assets/sunfloweroil.jpeg" },
+      { name: "Mustard Oil", category: "oils", supplier: "OilMill", price: 110, stock: 100, desc: "Cold-pressed mustard oil", image: "assets/mustard.oil.jpeg"},
+      { name: "Groundnut Oil", category: "oils", supplier: "OilMill", price: 140, stock: 80, desc: "Filtered groundnut oil", image: "assets/groundnut.jpeg"},
+      { name: "Soybean Oil", category: "oils", supplier: "OilMill", price: 125, stock: 70, desc: "Refined soy oil", image: "assets/soyabeanoil.jpeg" },
+      { name: "Apples", category: "fruits", supplier: "CaterPlus", price: 90, stock: 100, desc: "Fresh Shimla apples", image: "assets/apple.jpeg"},
+      { name: "Bananas", category: "fruits", supplier: "CaterPlus", price: 45, stock: 180, desc: "Organic bananas", image: "assets/banana.jpeg" },
+      { name: "Oranges", category: "fruits", supplier: "CaterPlus", price: 60, stock: 150, desc: "Juicy Nagpur oranges", image: "assets/orange.jpeg"},
+      { name: "Paper Plates", category: "others", supplier: "CaterPlus", price: 25, stock: 300, desc: "Biodegradable plates", image: "assets/plates.jpeg" },
+      { name: "Tissue Paper", category: "others", supplier: "CaterPlus", price: 15, stock: 500, desc: "Soft and durable", image: "assets/tissue.jpeg"},
+      { name: "Plastic Cups", category: "others", supplier: "CaterPlus", price: 20, stock: 400, desc: "Disposable cups", image: "assets/cups.jpeg"},
+    ];
+
+    let activeSupplier = "all";
+    let currentProduct = null;
+
+    const grid = document.getElementById("productGrid");
+    const search = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
+
+    function getAllProducts() {
+      const localProducts = JSON.parse(localStorage.getItem("products")) || [];
+      return [...products, ...localProducts];
+    }
+
+    function getUniqueSuppliers(productList) {
+      const supplierSet = new Set(["all"]);
+      productList.forEach(p => supplierSet.add(p.supplier));
+      return Array.from(supplierSet);
+    }
+
+    function renderSupplierButtons(suppliers) {
+      const container = document.getElementById("supplierButtons");
+      container.innerHTML = "";
+      suppliers.forEach(supplier => {
+        const btn = document.createElement("button");
+        btn.className = `supplier-btn bg-purple-100 hover:bg-purple-200 text-purple-800 px-4 py-2 rounded ${activeSupplier === supplier ? "bg-purple-800 text-white" : ""}`;
+        btn.setAttribute("data-supplier", supplier);
+        btn.textContent = supplier;
+        btn.onclick = () => {
+          activeSupplier = supplier;
+          renderProducts();
+          renderSupplierButtons(getUniqueSuppliers(getAllProducts()));
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function renderProducts() {
+      const keyword = search.value.toLowerCase();
+      const category = categoryFilter.value;
+      const allProducts = getAllProducts();
+      const filtered = allProducts.filter(p =>
+        (category === "all" || p.category === category) &&
+        (activeSupplier === "all" || p.supplier === activeSupplier) &&
+        p.name.toLowerCase().includes(keyword)
+      );
+
+      grid.innerHTML = "";
+      filtered.forEach((p, i) => {
+        const badges = p.badges ? p.badges.map(b => `<span class='text-xs bg-yellow-200 px-2 rounded mr-1'>${b}</span>`).join(" ") : "";
+        grid.innerHTML += `
+          <div class="bg-white p-4 rounded shadow">
+            <img src="${p.image}" alt="${p.name}" class="rounded mb-2 w-full h-40 object-cover">
+            <div class="flex justify-between items-center">
+              <h4 class="font-bold">${p.name}</h4>
+              ${badges}
+            </div>
+            <p class="text-sm">₹${p.price}/kg - ${p.supplier}</p>
+            <button onclick="openModal(${i})" class="bg-purple-700 text-white px-2 py-1 rounded mt-2">Quick View</button>
+          </div>`;
+      });
+    }
+
+    function openModal(index) {
+      const all = getAllProducts();
+      const p = all[index];
+      currentProduct = p;
+      document.getElementById("modal").classList.remove("hidden");
+      document.getElementById("modalTitle").textContent = p.name;
+      document.getElementById("modalDesc").textContent = p.desc;
+      document.getElementById("modalPrice").textContent = `Price: ₹${p.price}/kg`;
+      document.getElementById("modalStock").textContent = p.stock < 5 ? `Only ${p.stock} kg left!` : `${p.stock} kg available`;
+    }
+
+    function closeModal() {
+      document.getElementById("modal").classList.add("hidden");
+    }
+
+    function addToCart() {
+      const qty = parseInt(document.getElementById("modalQty").value);
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const index = cart.findIndex(item => item.name === currentProduct.name);
+      if (index !== -1) {
+        cart[index].qty += qty;
+      } else {
+        cart.push({ ...currentProduct, qty });
+      }
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert("Added to cart!");
+      closeModal();
+    }
+
+    document.getElementById("toggleDarkMode").onclick = () => {
+      document.getElementById("body").classList.toggle("dark-mode");
+    };
+
+    search.addEventListener("input", renderProducts);
+    categoryFilter.addEventListener("change", renderProducts);
+
+    renderProducts();
+    renderSupplierButtons(getUniqueSuppliers(getAllProducts()));
+  </script>
+</body>
+</html>
