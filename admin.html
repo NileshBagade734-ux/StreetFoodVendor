@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - StreetVendor Connect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body.dark { background-color: #1a202c; color: white; }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Navbar -->
+  <nav class="bg-purple-800 text-white p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">StreetVendor Admin Panel</h1>
+    <button id="toggleDark" class="bg-white text-purple-800 px-3 py-1 rounded">Toggle Dark Mode</button>
+  </nav>
+
+  <!-- Dashboard -->
+  <main class="p-6">
+    <h2 class="text-2xl font-bold mb-6">📊 Dashboard Overview</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="bg-white shadow-md rounded p-4">
+        <h3 class="text-lg font-semibold">Total Orders</h3>
+        <p id="orderCount" class="text-3xl mt-2">0</p>
+      </div>
+      <div class="bg-white shadow-md rounded p-4">
+        <h3 class="text-lg font-semibold">Vendors</h3>
+        <p id="vendorCount" class="text-3xl mt-2">0</p>
+      </div>
+      <div class="bg-white shadow-md rounded p-4">
+        <h3 class="text-lg font-semibold">Revenue</h3>
+        <p id="revenue" class="text-3xl mt-2">₹0</p>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <a href="products.html" class="bg-purple-100 text-purple-800 p-4 rounded shadow text-center">📦 Manage Products</a>
+      <a href="orders.html" class="bg-purple-100 text-purple-800 p-4 rounded shadow text-center">📑 Manage Orders</a>
+      <a href="vendors.html" class="bg-purple-100 text-purple-800 p-4 rounded shadow text-center">🏪 Vendors</a>
+      <a href="users.html" class="bg-purple-100 text-purple-800 p-4 rounded shadow text-center">👥 Users</a>
+    </div>
+  </main>
+
+  <footer class="bg-purple-800 text-white text-center py-4 mt-10">
+    <p>&copy; 2025 StreetVendor Connect - Admin Panel</p>
+  </footer>
+
+  <script>
+    // Dummy stats for now
+    document.getElementById("orderCount").textContent = 152;
+    document.getElementById("vendorCount").textContent = 28;
+    document.getElementById("revenue").textContent = "₹3,45,000";
+
+    document.getElementById("toggleDark").onclick = () => {
+      document.body.classList.toggle("dark");
+    }
+  </script>
+</body>
+</html>
