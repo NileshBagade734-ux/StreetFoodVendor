@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Product - Supplier Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <nav class="bg-purple-800 text-white p-4">
+    <h1 class="text-xl font-bold">Add Product</h1>
+  </nav>
+
+  <main class="max-w-xl mx-auto mt-10 bg-white p-6 rounded shadow">
+    <h2 class="text-xl font-semibold mb-4">Enter Product Details</h2>
+    <form id="productForm">
+      <input type="text" id="name" placeholder="Product Name" required class="w-full border mb-2 p-2 rounded">
+      <input type="number" id="price" placeholder="Price/kg" required class="w-full border mb-2 p-2 rounded">
+      <input type="number" id="stock" placeholder="Stock (kg)" required class="w-full border mb-2 p-2 rounded">
+      <input type="text" id="supplier" placeholder="Supplier Name" required class="w-full border mb-2 p-2 rounded">
+      <select id="category" required class="w-full border mb-2 p-2 rounded">
+        <option value="">Select Category</option>
+        <option value="vegetables">Vegetables</option>
+        <option value="spices">Spices</option>
+        <option value="grains">Grains</option>
+        <option value="fruits">Fruits</option>
+        <option value="dairy">Dairy</option>
+        <option value="oils">Oils</option>
+        <option value="others">Others</option>
+      </select>
+      <textarea id="desc" placeholder="Description" required class="w-full border mb-2 p-2 rounded"></textarea>
+
+      <button type="submit" class="bg-purple-800 text-white px-4 py-2 rounded">Add Product</button>
+      <p id="successMsg" class="text-green-600 mt-2 hidden">Product added successfully! Redirecting...</p>
+    </form>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-300 text-sm pt-6 pb-4">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 mb-6">
+        <div>
+          <h4 class="text-white font-semibold mb-2">Get to Know Us</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">About StreetVendor</a></li>
+            <li><a href="#" class="hover:underline">Careers</a></li>
+            <li><a href="#" class="hover:underline">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Connect with Us</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">Facebook</a></li>
+            <li><a href="#" class="hover:underline">Instagram</a></li>
+            <li><a href="#" class="hover:underline">Twitter</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Make Money</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">Sell on StreetVendor</a></li>
+            <li><a href="#" class="hover:underline">Become a Supplier</a></li>
+            <li><a href="#" class="hover:underline">Advertise</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Help</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">Your Account</a></li>
+            <li><a href="#" class="hover:underline">Returns</a></li>
+            <li><a href="#" class="hover:underline">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Subscribe</h4>
+          <p class="text-sm mb-1">Get updates & offers</p>
+          <form class="flex flex-col space-y-2">
+            <input type="email" placeholder="Enter email" class="px-3 py-2 rounded text-black text-sm">
+            <button class="bg-purple-700 hover:bg-purple-800 text-white text-sm px-3 py-2 rounded">Subscribe</button>
+          </form>
+        </div>
+      </div>
+
+      <hr class="border-gray-700 mb-4" />
+
+      <div class="flex flex-col md:flex-row justify-between items-center text-xs">
+        <div class="flex items-center space-x-3 mb-2 md:mb-0">
+          <select class="bg-gray-800 text-gray-300 px-3 py-1 rounded text-xs">
+            <option>🌐 English - India</option>
+            <option>हिन्दी</option>
+            <option>मराठी</option>
+          </select>
+          <select class="bg-gray-800 text-gray-300 px-3 py-1 rounded text-xs">
+            <option>🇮🇳 India</option>
+            <option>🇺🇸 USA</option>
+          </select>
+        </div>
+        <div class="flex space-x-3">
+          <a href="#"><img src="assets/playstore.png" class="h-6" /></a>
+          <a href="#"><img src="assets/appstore.png" class="h-6" /></a>
+        </div>
+      </div>
+
+      <div class="mt-4 text-center text-xs">
+        <p>&copy; 2025 <strong>StreetVendor Connect</strong>. All rights reserved.</p>
+        <p>Owned by <span class="text-white font-semibold">Nilesh Bagade</span>.</p>
+      </div>
+    </div>
+  </footer>
+  <script>
+    document.getElementById('productForm').onsubmit = function(e) {
+      e.preventDefault();
+      const newProduct = {
+        name: document.getElementById('name').value,
+        price: parseFloat(document.getElementById('price').value),
+        stock: parseInt(document.getElementById('stock').value),
+        supplier: document.getElementById('supplier').value,
+        category: document.getElementById('category').value,
+        desc: document.getElementById('desc').value
+      };
+
+      const existing = JSON.parse(localStorage.getItem('products')) || [];
+      existing.push(newProduct);
+      localStorage.setItem('products', JSON.stringify(existing));
+
+      document.getElementById('successMsg').classList.remove('hidden');
+
+      setTimeout(() => {
+        window.location.href = "product.html";
+      }, 1000);
+    };
+  </script>
+</body>
+</html>
