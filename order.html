@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order History - StreetVendor Connect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <nav class="bg-purple-800 text-white p-4">
+    <div class="container mx-auto flex justify-between">
+      <h1 class="text-xl font-bold">📦 Order History</h1>
+      <div class="flex gap-4">
+        <a href="dashboard.html" class="hover:underline">Back to Dashboard</a>
+        <a href="admin.html" class="hover:underline">Admin Panel</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container mx-auto py-8">
+    <h2 class="text-2xl font-bold mb-6 text-purple-800">Your Orders</h2>
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white shadow rounded">
+        <thead>
+          <tr class="bg-purple-100">
+            <th class="py-2 px-4 text-left">Order ID</th>
+            <th class="py-2 px-4 text-left">Date</th>
+            <th class="py-2 px-4 text-left">Total</th>
+            <th class="py-2 px-4 text-left">Status</th>
+            <th class="py-2 px-4 text-left">Details</th>
+            <th class="py-2 px-4 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="orderTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Modal -->
+    <div id="detailsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center">
+      <div class="bg-white p-6 rounded w-96 relative">
+        <button onclick="closeModal()" class="absolute top-2 right-2 text-lg">✖</button>
+        <h3 class="text-xl font-bold mb-2">Order Details</h3>
+        <div id="orderDetailsContent" class="text-sm space-y-2"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-300 text-sm pt-6 pb-4">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 mb-6">
+        <div>
+          <h4 class="text-white font-semibold mb-2">Get to Know Us</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">About StreetVendor</a></li>
+            <li><a href="#" class="hover:underline">Careers</a></li>
+            <li><a href="#" class="hover:underline">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Connect with Us</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">Facebook</a></li>
+            <li><a href="#" class="hover:underline">Instagram</a></li>
+            <li><a href="#" class="hover:underline">Twitter</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Make Money</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">Sell on StreetVendor</a></li>
+            <li><a href="#" class="hover:underline">Become a Supplier</a></li>
+            <li><a href="#" class="hover:underline">Advertise</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Help</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">Your Account</a></li>
+            <li><a href="#" class="hover:underline">Returns</a></li>
+            <li><a href="#" class="hover:underline">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Subscribe</h4>
+          <p class="text-sm mb-1">Get updates & offers</p>
+          <form class="flex flex-col space-y-2">
+            <input type="email" placeholder="Enter email" class="px-3 py-2 rounded text-black text-sm">
+            <button class="bg-purple-700 hover:bg-purple-800 text-white text-sm px-3 py-2 rounded">Subscribe</button>
+          </form>
+        </div>
+      </div>
+
+      <hr class="border-gray-700 mb-4" />
+
+      <div class="flex flex-col md:flex-row justify-between items-center text-xs">
+        <div class="flex items-center space-x-3 mb-2 md:mb-0">
+          <select class="bg-gray-800 text-gray-300 px-3 py-1 rounded text-xs">
+            <option>🌐 English - India</option>
+            <option>हिन्दी</option>
+            <option>मराठी</option>
+          </select>
+          <select class="bg-gray-800 text-gray-300 px-3 py-1 rounded text-xs">
+            <option>🇮🇳 India</option>
+            <option>🇺🇸 USA</option>
+          </select>
+        </div>
+        <div class="flex space-x-3">
+          <a href="#"><img src="assets/playstore.png" class="h-6" /></a>
+          <a href="#"><img src="assets/appstore.png" class="h-6" /></a>
+        </div>
+      </div>
+
+      <div class="mt-4 text-center text-xs">
+        <p>&copy; 2025 <strong>StreetVendor Connect</strong>. All rights reserved.</p>
+        <p>Owned by <span class="text-white font-semibold">Nilesh Bagade</span>.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function loadOrders() {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const tbody = document.getElementById('orderTableBody');
+      tbody.innerHTML = '';
+
+      orders.forEach((order, index) => {
+        tbody.innerHTML += `
+          <tr>
+            <td class="py-2 px-4">#${order.id}</td>
+            <td class="py-2 px-4">${order.date}</td>
+            <td class="py-2 px-4">₹${order.total}</td>
+            <td class="py-2 px-4">${order.status}</td>
+            <td class="py-2 px-4">
+              <button onclick="viewDetails(${index})" class="text-purple-700 hover:underline">Details</button>
+            </td>
+            <td class="py-2 px-4">
+              <button onclick="updateStatus(${index})" class="text-green-600 hover:underline">Next Status</button>
+              <button onclick="removeOrder(${index})" class="text-red-600 hover:underline ml-2">Remove</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function viewDetails(index) {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const order = orders[index];
+      const container = document.getElementById('orderDetailsContent');
+      container.innerHTML = '';
+
+      order.items.forEach(item => {
+        container.innerHTML += `<p><strong>${item.name}</strong> - ${item.qty} × ₹${item.price} = ₹${item.qty * item.price}</p>`;
+      });
+
+      container.innerHTML += `<p class="mt-2 font-semibold">Total: ₹${order.total}</p>`;
+      container.innerHTML += `<p>Status: ${order.status}</p>`;
+
+      document.getElementById('detailsModal').classList.remove('hidden');
+    }
+
+    function updateStatus(index) {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const currentStatus = orders[index].status;
+      const nextStatus = currentStatus === 'Pending' ? 'Shipped' : currentStatus === 'Shipped' ? 'Delivered' : 'Delivered';
+      orders[index].status = nextStatus;
+      localStorage.setItem('orders', JSON.stringify(orders));
+      loadOrders();
+    }
+
+    function removeOrder(index) {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      if (orders[index].status === 'Shipped' || orders[index].status === 'Delivered') {
+        orders.splice(index, 1);
+        localStorage.setItem('orders', JSON.stringify(orders));
+        loadOrders();
+      } else {
+        alert("You can only remove Shipped or Delivered orders.");
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('detailsModal').classList.add('hidden');
+    }
+
+    // Auto-create order from cart
+    function createOrderFromCart() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      if (cart.length === 0) return;
+
+      const total = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
+      const newOrder = {
+        id: Math.floor(Math.random() * 100000),
+        date: new Date().toLocaleDateString(),
+        total,
+        items: cart,
+        status: 'Pending'
+      };
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders.push(newOrder);
+      localStorage.setItem('orders', JSON.stringify(orders));
+      localStorage.removeItem('cart');
+    }
+
+    window.onload = () => {
+      createOrderFromCart();
+      loadOrders();
+    };
+  </script>
+</body>
+</html>
