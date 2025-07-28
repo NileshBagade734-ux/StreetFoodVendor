@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | StreetVendor Connect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg-light: #ffffff;
+      --bg-dark: #1f2937;
+      --text-light: #1f2937;
+      --text-dark: #ffffff;
+    }
+    body {
+      background: linear-gradient(to right, #d8b4fe, #c084fc);
+    }
+    body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+    .dark-mode input,
+    .dark-mode select,
+    .dark-mode button {
+      background-color: #374151;
+      color: white;
+      border-color: #4b5563;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen transition-all">
+  <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 w-full max-w-sm relative">
+    <!-- Dark mode toggle -->
+    <button id="darkToggle" class="absolute top-4 right-4 text-gray-400 hover:text-purple-700">🌙</button>
+
+    <div class="text-center mb-6">
+      <h1 class="text-2xl font-bold text-purple-800 dark:text-white">StreetVendor Connect</h1>
+      <p class="text-sm text-gray-500 dark:text-gray-300">🔒 SSL Encrypted | Trusted by 2000+ Vendors</p>
+    </div>
+
+    <form id="loginForm" class="space-y-4">
+      <input type="text" id="name" placeholder="Full Name"
+        class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600" required>
+
+      <input type="email" id="email" placeholder="Email"
+        class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600" required>
+
+      <div class="relative">
+        <input type="password" id="password" placeholder="Password"
+          class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600 pr-10" required>
+        <button type="button" id="togglePassword" class="absolute top-2.5 right-2 text-sm">👁</button>
+      </div>
+
+      <select id="role" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600">
+        <option value="">Select Role</option>
+        <option value="vendor">Vendor</option>
+        <option value="supplier">Supplier</option>
+      </select>
+
+      <button type="submit"
+        class="w-full bg-purple-700 text-white font-semibold py-2 rounded hover:bg-purple-800 transition">
+        Login
+      </button>
+    </form>
+
+    <p id="welcomeMsg" class="text-center text-purple-800 font-semibold mt-4 hidden"></p>
+
+    <p class="text-sm text-center mt-4">
+      Not registered?
+      <a href="register.html" class="text-purple-700 hover:underline">Create an account</a>
+    </p>
+
+    <!-- Demo Buttons (for testing) -->
+    <div class="mt-6">
+      <p class="text-center text-xs text-gray-500 dark:text-gray-300 mb-2">— Quick Demo Login —</p>
+      <div class="flex justify-between">
+        <button onclick="demoLogin('vendor')" class="text-xs bg-gray-200 px-2 py-1 rounded">Vendor Demo</button>
+        <button onclick="demoLogin('supplier')" class="text-xs bg-gray-200 px-2 py-1 rounded">Supplier Demo</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const toggleBtn = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    const emailInput = document.getElementById('email');
+    const nameInput = document.getElementById('name');
+    const roleSelect = document.getElementById('role');
+    const darkToggle = document.getElementById('darkToggle');
+    const welcomeMsg = document.getElementById('welcomeMsg');
+
+    toggleBtn.addEventListener('click', () => {
+      passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const role = roleSelect.value;
+      const userName = nameInput.value;
+
+      if (!role) {
+        alert('Please select a role');
+        return;
+      }
+
+      welcomeMsg.textContent = `Welcome, ${userName}!`;
+      welcomeMsg.classList.remove('hidden');
+
+      setTimeout(() => {
+        if (role === 'vendor') {
+          window.location.href = 'dashboard.html';
+        } else if (role === 'supplier') {
+          window.location.href = 'supplier-dashboard.html';
+        }
+      }, 1500);
+    });
+
+    function demoLogin(role) {
+      nameInput.value = role === 'vendor' ? 'Raju Bhai' : 'Sharma Foods';
+      emailInput.value = role + '@demo.com';
+      passwordInput.value = '123456';
+      roleSelect.value = role;
+    }
+
+    darkToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
+  </script>
+</body>
+</html>
