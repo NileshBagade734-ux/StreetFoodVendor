@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vendor Analytics Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans p-6">
+  <nav class="bg-purple-800 text-white p-4 rounded mb-6">
+    <div class="flex justify-between items-center">
+      <h1 class="text-xl font-bold">📊 Vendor Analytics Dashboard</h1>
+      <a href="dashboard.html" class="bg-white text-purple-800 px-4 py-1 rounded hover:bg-purple-100">Back to Dashboard</a>
+    </div>
+  </nav>
+
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Editable Orders Chart -->
+    <div class="bg-white rounded shadow p-4">
+      <h2 class="text-lg font-bold mb-2">📦 Orders Over Time</h2>
+      <div class="mb-2">
+        <label class="text-sm font-semibold">Enter monthly orders (comma-separated):</label>
+        <input type="text" id="ordersInput" class="border rounded px-2 py-1 w-full mb-2" value="12,19,30,45,32,50">
+        <button onclick="updateOrdersChart()" class="bg-purple-700 text-white px-3 py-1 rounded hover:bg-purple-800">Update Chart</button>
+      </div>
+      <canvas id="ordersChart" height="150"></canvas>
+    </div>
+
+    <!-- Editable Revenue Chart -->
+    <div class="bg-white rounded shadow p-4">
+      <h2 class="text-lg font-bold mb-2">💰 Revenue Over Time</h2>
+      <div class="mb-2">
+        <label class="text-sm font-semibold">Enter monthly revenue (comma-separated):</label>
+        <input type="text" id="revenueInput" class="border rounded px-2 py-1 w-full mb-2" value="1000,2500,3600,4700,3900,5200">
+        <button onclick="updateRevenueChart()" class="bg-purple-700 text-white px-3 py-1 rounded hover:bg-purple-800">Update Chart</button>
+      </div>
+      <canvas id="revenueChart" height="150"></canvas>
+    </div>
+
+    <!-- Editable Product Popularity -->
+    <div class="bg-white rounded shadow p-4">
+      <h2 class="text-lg font-bold mb-2">🔥 Most Popular Products</h2>
+      <div class="mb-2">
+        <label class="text-sm font-semibold">Enter product labels (comma-separated):</label>
+        <input type="text" id="productLabels" class="border rounded px-2 py-1 w-full mb-1" value="Pani Puri,Vada Pav,Chaat,Tea,Bhel">
+        <label class="text-sm font-semibold">Enter product shares (comma-separated):</label>
+        <input type="text" id="popularInput" class="border rounded px-2 py-1 w-full mb-2" value="30,25,20,15,10">
+        <button onclick="updatePopularChart()" class="bg-purple-700 text-white px-3 py-1 rounded hover:bg-purple-800">Update Chart</button>
+      </div>
+      <canvas id="popularChart" height="150"></canvas>
+    </div>
+
+    <!-- Editable Location Distribution -->
+    <div class="bg-white rounded shadow p-4">
+      <h2 class="text-lg font-bold mb-2">📍 Customer Distribution</h2>
+      <div class="mb-2">
+        <label class="text-sm font-semibold">Enter location labels (comma-separated):</label>
+        <input type="text" id="locationLabels" class="border rounded px-2 py-1 w-full mb-1" value="Pune,Mumbai,Nagpur,Nashik,Other">
+        <label class="text-sm font-semibold">Enter city distribution (comma-separated):</label>
+        <input type="text" id="locationInput" class="border rounded px-2 py-1 w-full mb-2" value="40,25,15,10,10">
+        <button onclick="updateLocationChart()" class="bg-purple-700 text-white px-3 py-1 rounded hover:bg-purple-800">Update Chart</button>
+      </div>
+      <canvas id="locationChart" height="150"></canvas>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-300 text-sm pt-6 pb-4">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 mb-6">
+        <div>
+          <h4 class="text-white font-semibold mb-2">Get to Know Us</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">About StreetVendor</a></li>
+            <li><a href="#" class="hover:underline">Careers</a></li>
+            <li><a href="#" class="hover:underline">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Connect with Us</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">Facebook</a></li>
+            <li><a href="#" class="hover:underline">Instagram</a></li>
+            <li><a href="#" class="hover:underline">Twitter</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Make Money</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">Sell on StreetVendor</a></li>
+            <li><a href="#" class="hover:underline">Become a Supplier</a></li>
+            <li><a href="#" class="hover:underline">Advertise</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Help</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">Your Account</a></li>
+            <li><a href="#" class="hover:underline">Returns</a></li>
+            <li><a href="#" class="hover:underline">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Subscribe</h4>
+          <p class="text-sm mb-1">Get updates & offers</p>
+          <form class="flex flex-col space-y-2">
+            <input type="email" placeholder="Enter email" class="px-3 py-2 rounded text-black text-sm">
+            <button class="bg-purple-700 hover:bg-purple-800 text-white text-sm px-3 py-2 rounded">Subscribe</button>
+          </form>
+        </div>
+      </div>
+
+      <hr class="border-gray-700 mb-4" />
+
+      <div class="flex flex-col md:flex-row justify-between items-center text-xs">
+        <div class="flex items-center space-x-3 mb-2 md:mb-0">
+          <select class="bg-gray-800 text-gray-300 px-3 py-1 rounded text-xs">
+            <option>🌐 English - India</option>
+            <option>हिन्दी</option>
+            <option>मराठी</option>
+          </select>
+          <select class="bg-gray-800 text-gray-300 px-3 py-1 rounded text-xs">
+            <option>🇮🇳 India</option>
+            <option>🇺🇸 USA</option>
+          </select>
+        </div>
+        <div class="flex space-x-3">
+          <a href="#"><img src="assets/playstore.png" class="h-6" /></a>
+          <a href="#"><img src="assets/appstore.png" class="h-6" /></a>
+        </div>
+      </div>
+
+      <div class="mt-4 text-center text-xs">
+        <p>&copy; 2025 <strong>StreetVendor Connect</strong>. All rights reserved.</p>
+        <p>Owned by <span class="text-white font-semibold">Nilesh Bagade</span>.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let ordersChart, revenueChart, popularChart, locationChart;
+
+    function parseCSV(inputId) {
+      return document.getElementById(inputId).value.split(',').map(val => isNaN(val) ? val.trim() : Number(val.trim()));
+    }
+
+    function createCharts() {
+      ordersChart = new Chart(document.getElementById('ordersChart').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [{ label: 'Orders', data: parseCSV('ordersInput'), borderColor: '#6b46c1', backgroundColor: 'rgba(107, 70, 193, 0.1)', tension: 0.4 }]
+        }
+      });
+
+      revenueChart = new Chart(document.getElementById('revenueChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [{ label: 'Revenue (₹)', data: parseCSV('revenueInput'), backgroundColor: '#6b46c1' }]
+        }
+      });
+
+      popularChart = new Chart(document.getElementById('popularChart').getContext('2d'), {
+        type: 'pie',
+        data: {
+          labels: parseCSV('productLabels'),
+          datasets: [{ data: parseCSV('popularInput'), backgroundColor: ['#6b46c1', '#9f7aea', '#d6bcfa', '#e9d8fd', '#f3e8ff'] }]
+        }
+      });
+
+      locationChart = new Chart(document.getElementById('locationChart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels: parseCSV('locationLabels'),
+          datasets: [{ data: parseCSV('locationInput'), backgroundColor: ['#6b46c1', '#9f7aea', '#b794f4', '#d6bcfa', '#ede9fe'] }]
+        }
+      });
+    }
+
+    function updateOrdersChart() {
+      ordersChart.data.datasets[0].data = parseCSV('ordersInput');
+      ordersChart.update();
+    }
+
+    function updateRevenueChart() {
+      revenueChart.data.datasets[0].data = parseCSV('revenueInput');
+      revenueChart.update();
+    }
+
+    function updatePopularChart() {
+      popularChart.data.labels = parseCSV('productLabels');
+      popularChart.data.datasets[0].data = parseCSV('popularInput');
+      popularChart.update();
+    }
+
+    function updateLocationChart() {
+      locationChart.data.labels = parseCSV('locationLabels');
+      locationChart.data.datasets[0].data = parseCSV('locationInput');
+      locationChart.update();
+    }
+
+    createCharts();
+  </script>
+</body>
+</html>
