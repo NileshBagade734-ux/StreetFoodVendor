@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vendor Location Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    #map { height: 400px; width: 100%; }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans p-6">
+  <nav class="bg-purple-800 text-white p-4 rounded mb-6">
+    <div class="flex justify-between items-center">
+      <h1 class="text-xl font-bold">📍 Vendor Location Dashboard</h1>
+      <button id="darkModeToggle" class="bg-white text-purple-800 px-4 py-1 rounded">Toggle Dark Mode</button>
+    </div>
+  </nav>
+
+  <div class="mb-6">
+    <label class="block mb-2 font-semibold">Enter Address:</label>
+    <input type="text" id="addressInput" class="border p-2 rounded w-full mb-3" placeholder="e.g., MG Road, Pune" />
+    <div class="flex gap-3 mb-4">
+      <button onclick="searchAddress()" class="bg-purple-700 text-white px-6 py-2 rounded hover:bg-purple-800">
+        🔍 Find on Map
+      </button>
+      <button onclick="getCurrentLocation()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        📍 Use My Location
+      </button>
+      <button onclick="saveLocation()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        💾 Save Location
+      </button>
+    </div>
+    <p id="locationStatus" class="text-sm text-gray-600"></p>
+  </div>
+
+  <div id="map" class="rounded shadow"></div>
+
+  <section class="mt-10 bg-white rounded shadow p-4">
+    <h2 class="text-lg font-bold text-purple-700 mb-2">📜 Saved Vendor Locations</h2>
+    <ul id="locationList" class="list-disc list-inside text-sm text-gray-700"></ul>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-300 text-sm pt-6 pb-4">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 mb-6">
+        <div>
+          <h4 class="text-white font-semibold mb-2">Get to Know Us</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">About StreetVendor</a></li>
+            <li><a href="#" class="hover:underline">Careers</a></li>
+            <li><a href="#" class="hover:underline">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Connect with Us</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">Facebook</a></li>
+            <li><a href="#" class="hover:underline">Instagram</a></li>
+            <li><a href="#" class="hover:underline">Twitter</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Make Money</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">Sell on StreetVendor</a></li>
+            <li><a href="#" class="hover:underline">Become a Supplier</a></li>
+            <li><a href="#" class="hover:underline">Advertise</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Help</h4>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="hover:underline">Your Account</a></li>
+            <li><a href="#" class="hover:underline">Returns</a></li>
+            <li><a href="#" class="hover:underline">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-2">Subscribe</h4>
+          <p class="text-sm mb-1">Get updates & offers</p>
+          <form class="flex flex-col space-y-2">
+            <input type="email" placeholder="Enter email" class="px-3 py-2 rounded text-black text-sm">
+            <button class="bg-purple-700 hover:bg-purple-800 text-white text-sm px-3 py-2 rounded">Subscribe</button>
+          </form>
+        </div>
+      </div>
+
+      <hr class="border-gray-700 mb-4" />
+
+      <div class="flex flex-col md:flex-row justify-between items-center text-xs">
+        <div class="flex items-center space-x-3 mb-2 md:mb-0">
+          <select class="bg-gray-800 text-gray-300 px-3 py-1 rounded text-xs">
+            <option>🌐 English - India</option>
+            <option>हिन्दी</option>
+            <option>मराठी</option>
+          </select>
+          <select class="bg-gray-800 text-gray-300 px-3 py-1 rounded text-xs">
+            <option>🇮🇳 India</option>
+            <option>🇺🇸 USA</option>
+          </select>
+        </div>
+        <div class="flex space-x-3">
+          <a href="#"><img src="assets/playstore.png" class="h-6" /></a>
+          <a href="#"><img src="assets/appstore.png" class="h-6" /></a>
+        </div>
+      </div>
+
+      <div class="mt-4 text-center text-xs">
+        <p>&copy; 2025 <strong>StreetVendor Connect</strong>. All rights reserved.</p>
+        <p>Owned by <span class="text-white font-semibold">Nilesh Bagade</span>.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let map = L.map('map').setView([20.5937, 78.9629], 5); // India default
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    let marker;
+    let savedLocations = JSON.parse(localStorage.getItem('vendorLocations')) || [];
+
+    function renderLocationList() {
+      const list = document.getElementById('locationList');
+      list.innerHTML = '';
+      savedLocations.forEach((loc, i) => {
+        const li = document.createElement('li');
+        li.textContent = `${loc.address} (Lat: ${loc.lat}, Lon: ${loc.lon})`;
+        li.classList.add("cursor-pointer", "hover:text-purple-700");
+        li.onclick = () => {
+          if (marker) map.removeLayer(marker);
+          marker = L.marker([loc.lat, loc.lon]).addTo(map).bindPopup(loc.address).openPopup();
+          map.setView([loc.lat, loc.lon], 15);
+        };
+        list.appendChild(li);
+      });
+    }
+
+    function searchAddress() {
+      const address = document.getElementById('addressInput').value.trim();
+      if (!address) return alert("Please enter an address.");
+      document.getElementById('locationStatus').textContent = "Searching...";
+
+      fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`, {
+        headers: { 'Accept': 'application/json' }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.length) return alert("Location not found.");
+        const { lat, lon, display_name } = data[0];
+        if (marker) map.removeLayer(marker);
+        marker = L.marker([lat, lon]).addTo(map).bindPopup(display_name).openPopup();
+        map.setView([lat, lon], 15);
+        document.getElementById('locationStatus').textContent = `Located: ${display_name}`;
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Failed to load map.");
+      });
+    }
+
+    function getCurrentLocation() {
+      if (!navigator.geolocation) return alert("Geolocation is not supported.");
+      navigator.geolocation.getCurrentPosition(pos => {
+        const { latitude, longitude } = pos.coords;
+        if (marker) map.removeLayer(marker);
+        marker = L.marker([latitude, longitude]).addTo(map).bindPopup("Current Location").openPopup();
+        map.setView([latitude, longitude], 15);
+        document.getElementById('locationStatus').textContent = `Current coordinates: (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`;
+      }, err => {
+        alert("Failed to get current location.");
+      });
+    }
+
+    function saveLocation() {
+      if (!marker) return alert("Set a location on map first.");
+      const lat = marker.getLatLng().lat;
+      const lon = marker.getLatLng().lng;
+      const address = document.getElementById('addressInput').value.trim() || "Unnamed Location";
+
+      savedLocations.push({ address, lat, lon });
+      localStorage.setItem('vendorLocations', JSON.stringify(savedLocations));
+
+      // Update vendorProfile with location
+      const vendorProfile = JSON.parse(localStorage.getItem('vendorProfile')) || {};
+      vendorProfile.address = address;
+      vendorProfile.lat = lat;
+      vendorProfile.lon = lon;
+      localStorage.setItem('vendorProfile', JSON.stringify(vendorProfile));
+
+      renderLocationList();
+      alert("Location saved successfully.");
+    }
+
+    document.getElementById('darkModeToggle').onclick = () => {
+      document.body.classList.toggle('bg-gray-100');
+      document.body.classList.toggle('bg-gray-900');
+      document.body.classList.toggle('text-white');
+    };
+
+    // Load profile address if available
+    const vendorProfile = JSON.parse(localStorage.getItem('vendorProfile')) || {};
+    if (vendorProfile.address) {
+      document.getElementById('addressInput').value = vendorProfile.address;
+      if (vendorProfile.lat && vendorProfile.lon) {
+        marker = L.marker([vendorProfile.lat, vendorProfile.lon])
+          .addTo(map)
+          .bindPopup(vendorProfile.address)
+          .openPopup();
+        map.setView([vendorProfile.lat, vendorProfile.lon], 15);
+        document.getElementById('locationStatus').textContent = `Loaded saved location: ${vendorProfile.address}`;
+      }
+    }
+
+    renderLocationList();
+  </script>
+</body>
+</html>
